@@ -33,6 +33,12 @@ function direction(event) {
   else if (event.keyCode == 40 && dir != "up") dir = "down";
 }
 
+function eatTail(head, arr) {
+  for (let i = 0; i < arr.length; i++) {
+    if (head.x == arr[i].x && head.y == arr[i].y) clearInterval(game);
+  }
+}
+
 function drawGame() {
   ctx.drawImage(ground, 0, 0);
   ctx.drawImage(foodImg, food.x, food.y);
@@ -58,7 +64,8 @@ function drawGame() {
     snake.pop();
   }
 
-  snake.pop();
+  if (snakeX < box || snakeX > box * 17 || snakeY < 3 * box || snakeY > box * 17)
+    clearInterval(game);
   if (dir == "left") snakeX -= box;
   if (dir == "right") snakeX += box;
   if (dir == "up") snakeY -= box;
@@ -68,6 +75,8 @@ function drawGame() {
     x: snakeX,
     y: snakeY,
   };
+  eatTail(newHead, snake);
+
   snake.unshift(newHead);
 }
 
